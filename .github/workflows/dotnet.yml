@@ -1,22 +1,15 @@
-name: Build + Tests
+name: Docker Image CI
 
 on:
-  workflow_dispatch:
   push:
-    branches: [ main ]
-  
-jobs:
-  build:
+    branches: [ $default-branch ]
 
+jobs:
+
+  build:
     runs-on: ubuntu-latest
-     
+
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup .NET 6
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 6.x
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Test
-      run: dotnet test --verbosity normal
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag fshttp:$(date +%s)
